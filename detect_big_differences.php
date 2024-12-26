@@ -44,6 +44,7 @@ if (count($argv) == 1) {
 $timestamps = $argv;
 
 $report = new report();
+
 if (!$report->parse_runs($timestamps, $normalize)) {
     echo 'Error: The selected runs are not comparable.' . PHP_EOL;
     foreach ($report->get_errors() as $var => $error) {

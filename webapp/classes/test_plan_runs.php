@@ -35,7 +35,7 @@ class test_plan_run {
     /**
      * @var array Vars that needs to be equals across runs to be comparable.
      */
-    public static $runcomparablevars = array('users', 'rampup', 'size', 'loopcount', 'throughput', 'baseversion');
+    public static $runcomparablevars = array('users', 'rampup', 'size', 'loopcount', 'throughput');
 
     /**
      * @var stdClass Run data, including the threads results.
@@ -380,7 +380,7 @@ class test_plan_run {
         $this->filename = $timestamp . '.php';
         $filepath = __DIR__ . '/../../' . report::RUNS_RELATIVE_PATH . $this->filename;
         if (!file_exists($filepath)) {
-            die('Error: The selected file "' . $this->filename . '" does not exists' . PHP_EOL);
+            die('Error: The selected file "' . $this->filename . '" does not exists' . PHP_EOL);{}
         }
 
         include($filepath);
@@ -401,7 +401,7 @@ class test_plan_run {
             $rundata->{$var} = $$var;
         }
         // Removing miliseconds.
-        $rundata->timestamp = substr($timestamp, 0, 10);
+        // $rundata->timestamp = substr($timestamp, 0, 10);
         $rundata->results = $results;
 
         return $rundata;

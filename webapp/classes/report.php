@@ -92,20 +92,14 @@ class report {
     /**
      * Gets the runs data
      *
-     * @param array $timestamps We will get the runs files from their timestamp (is part of the name).
+     * @param array $runnames We will get the runs files from their run name
      * @param bool $normalize We want to normalize clear outliers.
      * @return bool Whether runs are comparable or not.
      */
-    public function parse_runs(array $timestamps, bool $normalize = false) {
-
-        foreach ($timestamps as $timestamp) {
-
-            if (!is_numeric($timestamp)) {
-                die('Error: Timestamps are supposed to be [0-9]' . PHP_EOL);
-            }
-
+    public function parse_runs(array $runnames, bool $normalize = false) {
+        foreach ($runnames as $runname) {
             // Creating the run object and parsing it.
-            $run = new test_plan_run($timestamp, $normalize);
+            $run = new test_plan_run($runname, $normalize);
             $run->parse_results();
             $this->runs[] = $run;
         }
@@ -126,7 +120,6 @@ class report {
      * @return bool False if problems were found.
      */
     public function make(array $timestamps, $normalize = false) {
-
         // They come from the form in the opposite order.
         krsort($timestamps);
 

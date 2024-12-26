@@ -30,7 +30,7 @@ class properties_reader {
 
         // Ordered by preference.
         $files = array(
-            __DIR__ . '/../../jmeter_config.properties',
+            // __DIR__ . '/../../jmeter_config.properties',
             __DIR__ . '/../../defaults.properties'
         );
 
