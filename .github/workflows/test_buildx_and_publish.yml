@@ -3,9 +3,9 @@ name: Test and publish
 on: [push, pull_request, workflow_dispatch]
 
 env:
-  REPOSITORY: moodle-exttests
-  DOCKERHUB_OWNER: moodlehq
-  GH_OWNER: moodlehq
+  REPOSITORY: moodle-performance-comparison
+  DOCKERHUB_OWNER: andrewnicols
+  GH_OWNER: andrewnicols
 
 jobs:
   Test:
@@ -16,7 +16,7 @@ jobs:
 
       - name: Build image
         run: |
-          docker build . -t moodlehq-performance-comparison
+          docker build . -t moodle-performance-comparison
 
   Publish:
     # Completely avoid forks and pull requests to try this job.
