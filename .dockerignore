@@ -1,0 +1,7 @@
+.dockerignore
+*.md
+logs
+runs*
+*.sh
+*.bsf
+*.dist

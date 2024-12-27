@@ -51,7 +51,6 @@ class report {
      * @return void
      */
     public function __construct() {
-
         $this->chartsdeclaration = array(
             'vars_bar' => array(
                 'id' => 'vars_bar',
@@ -218,7 +217,7 @@ class report {
                         continue;
                     }
 
-                    $timestamp = preg_replace("/[^0-9]/","", $filename);
+                    $timestamp = pathinfo($filename, PATHINFO_FILENAME);
                     $runfiles[$timestamp] = new test_plan_run($timestamp);
 
                     // Get the params for filtering.

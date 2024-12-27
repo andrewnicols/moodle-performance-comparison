@@ -71,11 +71,11 @@ class test_plan_run {
     /**
      * Gets the run data from the run PHP file.
      *
-     * @param int $timestamp
+     * @param string $filename
      * @return void
      */
-    public function __construct($timestamp, $normalize = false) {
-        $this->rundata = $this->include_run($timestamp);
+    public function __construct($filename, $normalize = false) {
+        $this->rundata = $this->include_run($filename);
 
         // If we want to normalize data, go for it. Basically it
         // will get clear - really extreme - outliers and change
@@ -153,7 +153,6 @@ class test_plan_run {
      * @return string
      */
     public function get_filename($includeextension = true) {
-
         if (!$includeextension) {
             return basename($this->filename, '.php');
         }
@@ -185,8 +184,7 @@ class test_plan_run {
      * @return string
      */
     public function get_run_info_extended_string() {
-
-        $time = date('H:i D dS M Y', $this->rundata->timestamp);
+        $time = date('H:i D dS M Y', (int) $this->rundata->timestamp);
 
         return $this->rundata->rundesc . ' - ' . $this->rundata->group . ', ' .
             $this->rundata->size . ' size, ' .
@@ -348,7 +346,6 @@ class test_plan_run {
      * @return void
      */
     public function download() {
-
         $filepath = __DIR__ . '/../../runs/' . $this->get_filename();
 
         if (!file_exists($filepath)) {
@@ -376,8 +373,8 @@ class test_plan_run {
      * @return array
      */
     protected function include_run($timestamp) {
-
         $this->filename = $timestamp . '.php';
+
         $filepath = __DIR__ . '/../../' . report::RUNS_RELATIVE_PATH . $this->filename;
         if (!file_exists($filepath)) {
             die('Error: The selected file "' . $this->filename . '" does not exists' . PHP_EOL);{}
@@ -403,6 +400,10 @@ class test_plan_run {
         // Removing miliseconds.
         // $rundata->timestamp = substr($timestamp, 0, 10);
         $rundata->results = $results;
+
+        if (!empty($results)) {
+            $rundata->timestamp = $results[0][0]['starttime'] / 1000;
+        }
 
         return $rundata;
     }
