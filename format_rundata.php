@@ -28,23 +28,55 @@ include(__DIR__ . '/webapp/lib.php');
 // Removing the script name.
 array_shift($argv);
 
-foreach ($argv as $arg) {
-    $filename = pathinfo($arg, PATHINFO_FILENAME);
-    $filepath = pathinfo($arg, PATHINFO_DIRNAME);
-    if (!str_ends_with($arg, '.php')) {
+foreach ($argv as $inputfile) {
+    $filename = pathinfo($inputfile, PATHINFO_FILENAME);
+    $filepath = pathinfo($inputfile, PATHINFO_DIRNAME);
+    if (!str_ends_with($inputfile, '.php')) {
         echo 'Error: You need to specify the runs filenames without their .php suffix.' . PHP_EOL;
         exit(1);
     }
 
-    if (!file_exists($arg)) {
-        echo "Error: The file $arg does not exist." . PHP_EOL;
+    if (!file_exists($inputfile)) {
+        echo "Error: The file $inputfile does not exist." . PHP_EOL;
         exit(1);
     }
 
-    require_once($arg);
+    $data = get_normalised_dataset($inputfile);
+    $outputfile = "{$filename}.json";
+    file_put_contents("{$filepath}/{$filename}.json", json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) . "\n");
 
-    $data = (object) [
-        'filename' => $filename,
+    echo "Converted file {$inputfile} to {$outputfile}" . PHP_EOL;
+}
+
+function get_normalised_dataset($datapath) {
+    require_once($datapath);
+    $runinfovars = [
+        'host',
+        'sitepath',
+        'group',
+        'rundesc',
+        'users',
+        'loopcount',
+        'rampup',
+        'throughput',
+        'size',
+        'baseversion',
+        'siteversion',
+        'sitebranch',
+        'sitecommit',
+    ];
+
+    foreach ($runinfovars as $var) {
+        // In case runs don't have all vars defined.
+        if (empty($$var)) {
+            $$var = 'Unknown';
+        }
+    }
+
+    $filename = pathinfo($datapath, PATHINFO_FILENAME);
+
+    return (object) [
+        'filename' => "{$filename}.json",
         'host' => $host,
         'sitepath' => $sitepath,
         'group' => $group,
@@ -60,5 +92,4 @@ foreach ($argv as $arg) {
         'sitecommit' => $sitecommit,
         'results' => $results,
     ];
-    file_put_contents("{$filepath}/{$filename}.json", json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) . "\n");
 }
